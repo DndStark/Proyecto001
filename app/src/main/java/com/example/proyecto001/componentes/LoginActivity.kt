@@ -1,5 +1,6 @@
 package com.example.proyecto001.componentes
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,11 +22,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.proyecto001.MainActivity
 import com.example.proyecto001.R
 import com.example.proyecto001.navegation.AppScreens
 
 @Composable
 fun LoginActivity(navController: NavController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
