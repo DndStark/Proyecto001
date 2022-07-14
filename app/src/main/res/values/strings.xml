@@ -13,4 +13,8 @@
     <string name="title_app">Mis finanzas personales</string>
     <string name="google_button">Ingresar con Google</string>
     <string name="Logout_button">Salir</string>
+    <string name="title_activity_first">FirstActivity</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="guionline">------------------------------------------------------------ </string>
+    <string name="title_activity_items">ItemsActivity</string>
 </resources>

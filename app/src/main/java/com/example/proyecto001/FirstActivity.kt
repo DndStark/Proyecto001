@@ -1,7 +1,11 @@
-package com.example.proyecto001.componentes
+package com.example.proyecto001
 
+import android.os.Bundle
+import android.os.Message
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,20 +18,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.proyecto001.MainActivity
-import com.example.proyecto001.R
-import com.example.proyecto001.navegation.AppScreens
+import coil.compose.rememberAsyncImagePainter
+
+class FirstActivity: ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val message: String? = intent.getStringExtra("message")
+        val url: String? = intent.getStringExtra("url")
+        setContent {
+            Content(message, url)
+        }
+    }
+}
+
 
 @Composable
-fun LoginActivity(navController: NavController) {
+fun Content(message: String?, url: String?) {
 
     Column(
         modifier = Modifier
@@ -57,51 +70,37 @@ fun LoginActivity(navController: NavController) {
                 Text(
                     buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("M")
+                            append("No")
                         }
-                        append("is ")
+                        append("ti")
 
                         withStyle(style = SpanStyle(color = Color.Blue)) {
-                            append("F")
+                            append("fi")
                         }
-                        append("inanzas ")
+                        append("ca ")
 
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Green)) {
-                            append("P")
+                            append("ci")
                         }
-                        append("ersonales")
+                        append("ón")
                     },
                     style = MaterialTheme.typography.h1,
                     fontSize = 30.sp,
                     color = Color.Black
+
                 )
                 Divider(modifier = Modifier.width(280.dp),color = colorResource(id = R.color.color07), thickness = 1.dp)
+                Text(
+                    text = ""+message
+                )
                 Image(
-                    painter = painterResource(id = R.drawable.finanzas_login),
+                    painter = rememberAsyncImagePainter("" + url),
                     contentDescription = "Cat Logo",
                     modifier = Modifier
                         .size(300.dp)
                 )
-                GoogleButton(navController)
-
             }
         }
     }
 
-}
-
-@Composable
-fun GoogleButton(navController: NavController){
-    Button(onClick = {
-            navController.navigate(route = AppScreens.GroupsActivity.route +"/"+ "Miguel")
-        },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-        border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.color07)),
-    ) {
-        Image(
-            modifier = Modifier.padding(1.dp),
-            painter = painterResource(id = R.drawable.ic_google_foreground),
-            contentDescription = "Google")
-        Text(text = stringResource(id = R.string.google_button), color = Color.Black)
-    }
 }

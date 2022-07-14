@@ -16,6 +16,21 @@
         android:theme="@style/Theme.Proyecto001"
         tools:targetApi="31">
         <activity
+            android:name=".ItemsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_items"
+            android:theme="@style/Theme.Proyecto001" />
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_category"
+            android:theme="@style/Theme.Proyecto001" />
+        <activity
+            android:name=".FirstActivity"
+            android:exported="false"
+            android:label="@string/title_activity_first"
+            android:theme="@style/Theme.Proyecto001" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Proyecto001">
@@ -25,6 +40,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".firebase.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.proyecto001.componentes
+package com.example.proyecto001.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -19,31 +19,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.proyecto001.R
-import com.example.proyecto001.navegation.AppScreens
 
 @Composable
-fun LeftNavMenu(navController: NavController) {
+fun CategoryLeftNav(usuario: String) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        UserData()
+        UserData(usuario)
         Divider(modifier = Modifier.width(300.dp), color = colorResource(id = R.color.color07), thickness = 1.dp)
         MenuList()
         Divider(modifier = Modifier.width(300.dp), color = colorResource(id = R.color.color07), thickness = 1.dp)
-        LogOutButton(navController)
+        LogOutButton()
     }
 }
 
 @Composable
-fun UserData(){
+fun UserData(usuario: String){
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Image(
-            painter = rememberImagePainter(data = "https://miguelmedina.online/img/minions43.jpg"),
+            painter = rememberAsyncImagePainter(model = "https://miguelmedina.online/img/minions43.jpg"),
             contentDescription = "Cat Logo",
             modifier = Modifier
                 .size(100.dp)
@@ -54,7 +52,7 @@ fun UserData(){
         Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.padding(top = 30.dp)) {
-            Text(text = "Bienvenido Miguel", fontWeight = FontWeight.Bold)
+            Text(text = "Bienvenido $usuario", fontWeight = FontWeight.Bold)
             // Add a vertical space between the author and message texts
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "miguelmedina@unsa.edu.pe", fontSize = 12.sp)
@@ -114,9 +112,9 @@ fun AddItem(nameCat: String, iconPath: ImageVector){
 }
 
 @Composable
-fun LogOutButton(navController: NavController){
+fun LogOutButton(){
     Button(onClick = {
-        navController.navigate(route = AppScreens.LoginActivity.route)
+        //navController.navigate(route = AppScreens.LoginActivity.route)
     },
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
         border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.color07)),
