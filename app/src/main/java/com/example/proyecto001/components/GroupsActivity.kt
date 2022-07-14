@@ -1,4 +1,4 @@
-package com.example.proyecto001.componentes
+package com.example.proyecto001.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -34,7 +34,7 @@ fun Body(navController: NavController, usuario: String?) {
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
-            LeftNavMenu(navController)
+            CategoryLeftNav("" + usuario)
         }
     ) {
         GruposCat(navController, usuario)

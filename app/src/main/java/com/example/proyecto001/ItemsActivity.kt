@@ -1,9 +1,9 @@
-package com.example.proyecto001.componentes
+package com.example.proyecto001
 
 import android.app.Application
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,27 +17,39 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.proyecto001.R
 import com.example.proyecto001.database.entities.Item
 import com.example.proyecto001.database.utils.*
 import com.example.proyecto001.database.view.ItemViewFactory
 import com.example.proyecto001.database.view.ViewItem
-import com.example.proyecto001.navegation.AppScreens
-import java.lang.NumberFormatException
+import com.example.proyecto001.ui.theme.Proyecto001Theme
+
+class ItemsActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Proyecto001Theme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    BodyItemActivity("Android")
+                }
+            }
+        }
+    }
+}
 
 @Composable
-fun FormActivity(navController: NavController, grupo: String?){
+fun BodyItemActivity(grupo: String?){
     val context = LocalContext.current
 
     val viewItem: ViewItem = viewModel(
@@ -48,7 +60,7 @@ fun FormActivity(navController: NavController, grupo: String?){
 
     var nombre by remember{ mutableStateOf("") }
     var monto by remember{ mutableStateOf("") }
-    
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -82,7 +94,7 @@ fun FormActivity(navController: NavController, grupo: String?){
         }
         Column(
             modifier = Modifier
-                .padding(top = 25.dp)
+                .padding(top = 15.dp)
                 .height(500.dp)
                 .width(280.dp),
             verticalArrangement = Arrangement.Center,
@@ -91,21 +103,21 @@ fun FormActivity(navController: NavController, grupo: String?){
             Column(modifier = Modifier
                 .height(350.dp)
                 .width(280.dp)
-                .padding(top = 15.dp, bottom = 15.dp)
+                .padding(top = 5.dp)
             ){
-                itemsList(list = items, viewItem = viewItem)
+                ItemList(list = items, viewItem = viewItem)
             }
         }
     }
 }
 
 @Composable
-fun itemsList(list: List<Item>, viewItem: ViewItem){
+fun ItemList(list: List<Item>, viewItem: ViewItem){
     val context = LocalContext.current
     Card(
         modifier = Modifier
             .offset(y = (-20).dp)
-            .width(350.dp),
+            .width(450.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = 15.dp
     ){
@@ -115,14 +127,14 @@ fun itemsList(list: List<Item>, viewItem: ViewItem){
                 .padding(15.dp)
         ){
             items(list){item ->
-                Item(item, getCategoryIcon(item.itemCate), viewItem)
+                Itemm(item, CatIcon(item.itemCate), viewItem)
             }
         }
     }
 }
 
 @Composable
-fun Item(item: Item, iconPath: ImageVector, viewItem: ViewItem){
+fun Itemm(item: Item, iconPath: ImageVector, viewItem: ViewItem){
     Row (
         modifier = Modifier.padding(5.dp),
         horizontalArrangement = Arrangement.End
@@ -157,14 +169,7 @@ fun Item(item: Item, iconPath: ImageVector, viewItem: ViewItem){
     }
 }
 
-@Composable
-fun SubGroupButton(text: String){
-    Button(onClick = { /*TODO*/ }) {
-        Text(text = text)
-    }
-}
-
-fun getCategoryIcon(nameCate: String): ImageVector{
+fun CatIcon(nameCate: String): ImageVector {
     var icon: ImageVector = Icons.Rounded.ShoppingCart
 
     when (nameCate){
