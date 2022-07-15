@@ -1,7 +1,9 @@
 package com.example.proyecto001.firebase
 
+import android.content.Context
 import android.util.Log
-import com.google.android.gms.tasks.Task
+import com.example.proyecto001.R
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -11,6 +13,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     companion object{
         const val TAG = "FIREBASE"
     }
+    private val dbFirestore = FirebaseFirestore.getInstance()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // ...
@@ -44,12 +47,24 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        //val refreshedToken: String= FirebaseMessaging.getInstance().token.toString()
+        //val tokenk: Task<String> = FirebaseMessaging.getInstance().token
+        // Save token on SharedPreferences
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.plusline) + " tokennn " + token)
+        val preferences = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        preferences.putString("token", ""+token)
+        preferences.apply()
 
-        val refreshedToken: String= FirebaseMessaging.getInstance().token.toString()
-        Log.d(TAG, "---------- Refreshed token: $refreshedToken")
+        val preferencesGet = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val mail: String? = preferencesGet.getString("mail", null)
+        if(mail != null){
+            Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " tttttttttttttttttttttttt " + token)
+            dbFirestore.collection("users").document(mail).set(
+                hashMapOf("token" to token)
+            )
+            Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " mmmmmmmmmmmmmmmmmmmmmmmm " + mail)
+        }
 
-        val tokenk: Task<String> = FirebaseMessaging.getInstance().token
-        Log.d(TAG, "---------- Tokenk: $tokenk")
-        Log.d(TAG, "---------- Token: $token")
+
     }
 }

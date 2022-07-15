@@ -99,8 +99,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
 
-    //Firebase Cloud Messaging
+    //Cloud Database
     implementation 'com.google.firebase:firebase-firestore:24.2.0'
+
+    //Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging:23.0.6'
 
     //Preferences Datastore

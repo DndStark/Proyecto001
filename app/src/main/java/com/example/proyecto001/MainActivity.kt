@@ -38,22 +38,27 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
+    //Código para nuestra autenticación
     private val GOOGLE_SIGN_IN = 1000
+    //Conexión a Firebase
     private lateinit var  firebaseAuth: FirebaseAuth
+    //Conexión a Firebase Google Auth
     private lateinit var googleSignIngClient: GoogleSignInClient
-
+    //Conexión a Jetpack Datastore
     private lateinit var settingManager: SettingsManager
-
+    //Intent general para dirigirnos a una segunda actividad
     private lateinit var intentTo: Intent
+    //Conexión a Cloud Firestore
+    private val dbFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "create")
         //notification()
 
         setContent {
@@ -65,7 +70,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun manageCounter(){
-        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "manageCounter" )
         settingManager = SettingsManager(applicationContext)
         var counterValue = ""
 
@@ -74,7 +78,7 @@ class MainActivity : ComponentActivity() {
             settingManager.counter.collect{counter ->
                 counterValue = counter.toString()
                 counterValue?.let {
-                    intentTo = Intent(this@MainActivity, ItemsActivity::class.java)
+                    intentTo = Intent(this@MainActivity, CategoryActivity::class.java)
                     intentTo.putExtra("counter", counterValue)
                     startActivity(intentTo)
                 }
@@ -122,13 +126,27 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(this@MainActivity, "Este es un mensaje - ${s}", Toast.LENGTH_LONG).show()
     }
 
-    fun saveCredentials(name: String, mail: String){
-        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "saveCredentials")
-        // Guardando datosde inicio de sesión
+    fun saveCredentials(mail: String, name: String){
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "maillllllllllllll" + mail)
+        // Guardando datos de inicio de sesión
         val preferences = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         preferences.putString("email", mail)
         preferences.putString("name", name)
         preferences.apply()
+
+        val preferencesGet = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val token: String? = preferencesGet.getString("token", null)
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " tokennn " + token)
+        saveCredentialsFirestore(mail, name, token!!)
+    }
+
+    fun saveCredentialsFirestore(mail: String, name: String, token: String){
+        // Guardando datos de inicio de sesión en Cloud Firestore
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "mail" + mail)
+        dbFirestore.collection("users").document(mail).set(
+            hashMapOf("name" to name, "token" to token)
+        )
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "name" + name)
     }
 
     fun VerifyLastLogin(): Boolean {
@@ -143,6 +161,11 @@ class MainActivity : ComponentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " Verify token shared")
+        val preferences = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val tk: String? = preferences.getString("token", null)
+        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " ttt " + tk)
+
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -151,8 +174,6 @@ class MainActivity : ComponentActivity() {
                 val account = task.getResult(ApiException::class.java)!!
 
                 if(account!=null){
-                    Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "onActivityResult")
-                    Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + " /////////////" + account.idToken)
                     firebaseAuthWithGoogle(account.idToken!!)
                 }else{
                     Toast.makeText(this, "Su correo no existe",Toast.LENGTH_LONG).show()
@@ -166,8 +187,6 @@ class MainActivity : ComponentActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + idToken)
-        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + "FirebaseAuthWithGoogle")
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -175,19 +194,13 @@ class MainActivity : ComponentActivity() {
                     val user = firebaseAuth.currentUser
                     if (user != null) {
                         saveCredentials(user.email.toString(), user.displayName.toString())
-                        Log.d(MyFirebaseMessagingService.TAG, getString(R.string.guionline) + user.getIdToken(true))
-                        Toast.makeText(this, " ${user.email.toString()} - ${user.displayName.toString()}", Toast.LENGTH_SHORT).show()
-                        setContent {
-                            Proyecto001Theme {
-                                user.email.toString()?.let {
-                                    val intent = Intent(this@MainActivity, CategoryActivity::class.java)
-                                    intent.putExtra("name", user.email.toString())
-                                    intent.putExtra("email", user.displayName.toString())
-                                    startActivity(intent)
-
-                                }
-                            }
+                        user.email.toString()?.let {
+                            val intent = Intent(this@MainActivity, CategoryActivity::class.java)
+                            intent.putExtra("name", user.email.toString())
+                            intent.putExtra("email", user.displayName.toString())
+                            startActivity(intent)
                         }
+
                     } else
                         Toast.makeText(this, " null user", Toast.LENGTH_SHORT).show()
                     //Redirect
