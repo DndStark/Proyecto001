@@ -17,5 +17,8 @@
     <string name="title_activity_category">CategoryActivity</string>
     <string name="guionline">------------------------------------------------------------ </string>
     <string name="title_activity_items">ItemsActivity</string>
+<<<<<<< HEAD
     <string name="plusline">++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</string>
+=======
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
 </resources>

@@ -1,9 +1,13 @@
 package com.example.proyecto001
 
 import android.app.Application
+<<<<<<< HEAD
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+=======
+import android.os.Bundle
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -31,12 +35,16 @@ import com.example.proyecto001.database.entities.Item
 import com.example.proyecto001.database.utils.*
 import com.example.proyecto001.database.view.ItemViewFactory
 import com.example.proyecto001.database.view.ViewItem
+<<<<<<< HEAD
 import com.example.proyecto001.firebase.MyFirebaseMessagingService
+=======
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
 import com.example.proyecto001.ui.theme.Proyecto001Theme
 
 class ItemsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+<<<<<<< HEAD
 
         val preferences = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val mail: String? = preferences.getString("email", null)
@@ -48,6 +56,8 @@ class ItemsActivity : ComponentActivity() {
 
         val grupo: String? = intent.getStringExtra("grupo")
 
+=======
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
         setContent {
             Proyecto001Theme {
                 // A surface container using the 'background' color from the theme
@@ -55,7 +65,11 @@ class ItemsActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+<<<<<<< HEAD
                     BodyItemActivity(grupo)
+=======
+                    BodyItemActivity("Android")
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
                 }
             }
         }

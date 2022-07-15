@@ -1,9 +1,14 @@
 package com.example.proyecto001.firebase
 
+<<<<<<< HEAD
 import android.content.Context
 import android.util.Log
 import com.example.proyecto001.R
 import com.google.firebase.firestore.FirebaseFirestore
+=======
+import android.util.Log
+import com.google.android.gms.tasks.Task
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -13,7 +18,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     companion object{
         const val TAG = "FIREBASE"
     }
+<<<<<<< HEAD
     private val dbFirestore = FirebaseFirestore.getInstance()
+=======
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // ...
@@ -47,6 +55,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+<<<<<<< HEAD
         //val refreshedToken: String= FirebaseMessaging.getInstance().token.toString()
         //val tokenk: Task<String> = FirebaseMessaging.getInstance().token
         // Save token on SharedPreferences
@@ -66,5 +75,14 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         }
 
 
+=======
+
+        val refreshedToken: String= FirebaseMessaging.getInstance().token.toString()
+        Log.d(TAG, "---------- Refreshed token: $refreshedToken")
+
+        val tokenk: Task<String> = FirebaseMessaging.getInstance().token
+        Log.d(TAG, "---------- Tokenk: $tokenk")
+        Log.d(TAG, "---------- Token: $token")
+>>>>>>> 85bb036a2d9c5c1798558e303dbcab3f26a15cc5
     }
 }
